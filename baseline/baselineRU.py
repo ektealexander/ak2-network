@@ -48,6 +48,7 @@ def main():
     enable_s = getpass.getpass("Enable secret [cisco]: ").strip() or "cisco"
     user     = input("Local admin-account [cisco]: ").strip() or "cisco"
     pw       = getpass.getpass("Password for local admin [cisco]: ").strip() or "cisco"
+    mgmt_vlan  = input("MGMT VLAN ID [99]: ").strip() or "99"
     mgmt_ip  = input("MGMT IP: ").strip()
     mgmt_msk = input("MGMT network mask: ").strip()
     mgmt_if  = input("MGMT interface (e.g. gi0/0/0): ").strip()
@@ -80,8 +81,8 @@ def main():
 
         f"interface {mgmt_if}",
         " no shutdown",
-        f"interface {mgmt_if}.99",
-        "encapsulation dot1Q 99",
+        f"interface {mgmt_if}.{mgmt_vlan}",
+        f"encapsulation dot1Q {mgmt_vlan}",
         f"ip address {mgmt_ip} {mgmt_msk}",
         "exit",
     ]
