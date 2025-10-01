@@ -1,3 +1,12 @@
+# Network Automation med Ansible
+
+Dette repoet inneholder konfigurasjon for et lab-nettverk:
+- 2x Cisco 4221 rutere (HSRP på transit)
+- 1x Catalyst 3650 (L3 core, VLAN, inter-VLAN ruting, EtherChannel)
+- 3x L2-switcher (Catalyst 2960/1000 som access)
+
+
+
 1. Connect Cisco console cable
 
 2. Run one of the scripts based on the device:
