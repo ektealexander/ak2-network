@@ -58,6 +58,45 @@
     - name: acl 99
       cisco.ios.ios_config:
         lines:
-          - "no access-list 99"
+        match: line
+        replace: line
           - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 deny any log"
+          - "access-list 99 deny any"
+
+    - name: vty 0-15 with acl
+      cisco.ios.ios_config:
+        parents: line vty 0 15
+        lines: 
+        match: line
+        replace: line
+          - "exec-timeout 10 0"
+          - "transport input ssh"
+          - "login local"
+          - "access-class 99 in"
+
+    - name: block multiple vlan to mgmt-vlan
+      cisco.ios.ios_config:
+        paretns: ip access-list extended protect_v99
+        lines:       
+        match: line
+        replace: line
+          - "deny ip any 10.1.99.0 0.0.0.255"
+          - "deny ip any 10.0.99.0 0.0.0.255"
+          - "permit ip any any"
+
+    
+    - name: apply acl on L3 interface 0.0.0.99
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet0/0/0.99
+        line:
+        match: line
+        replace: line
+          - "ip access-group protect_v99 out"
+
+    - name: apply acl on L3 interface 0.0.1.99
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet0/0/1.99
+        line:
+        match: line
+        replace: line
+          - "ip access-group protect_v99 out"
