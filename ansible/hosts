@@ -1,0 +1,29 @@
+[l3]
+sw1 ansible_host=10.0.99.10
+
+[router]
+r1 ansible_host=10.0.99.2
+r2 ansible_host=10.0.99.3
+
+[agg]
+sw2 ansible_host=10.1.99.10
+sw3 ansible_host=10.1.99.11
+
+[access]
+sw4 ansible_host=10.1.99.12
+sw5 ansible_host=10.1.99.13
+
+[cisco:children]
+l3
+router
+agg
+access
+
+[cisco:vars]
+ansible_network_os=cisco.ios.ios
+ansible_connection=network_cli
+ansible_user=cisco
+ansible_password=cisco
+ansible_become=yes
+ansible_become_method=enable
+ansible_become_password=cisco

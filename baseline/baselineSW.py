@@ -54,7 +54,7 @@ def main():
     mgmt_msk   = input("MGMT network mask: ").strip()
     mgmt_gw    = input("MGMT default-gateway: ").strip()
 
-    trunks_expr   = input("Trunk-ports (e.g. gi1/0/24,gi1/0/28): ").strip()
+    trunks_expr   = input("Trunk-ports (e.g. gi1/0/24,gi1/0/28,fa0/1,fa0/3): ").strip()
     trunks        = parse_if_list(trunks_expr)
     if not trunks:
         print("Select at least 1 trunk-port"); sys.exit(1)

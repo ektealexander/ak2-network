@@ -1,10 +1,10 @@
 # Network Automation med Ansible
 
 Dette repoet inneholder konfigurasjon for et lab-nettverk:
-- 2x Cisco 4221 rutere (HSRP på transit)
-- 1x Catalyst 3650 (L3 core, VLAN, inter-VLAN ruting, EtherChannel)
-- 3x L2-switcher (Catalyst 2960/1000 som access)
-
+- 2x Cisco 4221 router
+- 1x L3 Catalyst 3650
+- 3x L2 Catalyst 2960
+- 1x L2 Catalyst 1000 Series
 
 
 1. Connect Cisco console cable
@@ -75,7 +75,6 @@ Password for local admin:
 Management interface (e.g. GigabitEthernet0/0/0): gi0/0/1
 Management IP address: 10.0.99.1
 Management subnet mask: 255.255.255.0
-Default route next-hop IP: 10.0.99.1
 
 Config transferred complete
 

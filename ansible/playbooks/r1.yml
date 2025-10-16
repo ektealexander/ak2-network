@@ -1,0 +1,97 @@
+---
+- hosts: r1
+  gather_facts: no
+  tasks:
+    - name: trunk 0/0/0 sw1
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/0"
+        lines:
+          - "no shutdown"
+
+    - name: trunk 0/0/0.99 sw1
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/0.99"
+        lines:
+          - "encapsulation dot1Q 99"
+          - "ip address 10.0.99.2 255.255.255.0"
+          - "standby 10 ip 10.0.99.1"
+          - "standby 10 priority 120"
+          - "standby 10 preempt"
+          - "no shutdown"
+
+    - name: trunk 0/0/1 sw2
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/1"
+        lines:
+          - "no shutdown"
+
+    - name: trunk 0/0/1.10 HSRP sw2
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/1.10"
+        lines:
+          - "encapsulation dot1Q 10"
+          - "ip address 10.1.10.2 255.255.255.0"
+          - "standby 20 ip 10.1.10.1"
+          - "standby 20 priority 120"
+          - "standby 20 preempt"
+          - "no shutdown"
+
+    - name: trunk 0/0/1.20 HSRP sw2
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/1.20"
+        lines:
+          - "encapsulation dot1Q 20"
+          - "ip address 10.1.20.2 255.255.255.0"
+          - "standby 30 ip 10.1.20.1"
+          - "standby 30 priority 120"
+          - "standby 30 preempt"
+          - "no shutdown"
+
+    - name: trunk 0/0/1.99 HSRP sw2
+      cisco.ios.ios_config:
+        parents: "interface gi0/0/1.99"
+        lines:
+          - "encapsulation dot1Q 99"
+          - "ip address 10.1.99.2 255.255.255.0"
+          - "standby 40 ip 10.1.99.1"
+          - "standby 40 priority 120"
+          - "standby 40 preempt"
+          - "no shutdown"
+
+
+    - name: dhcp vlan10
+      cisco.ios.ios_config:
+        lines:
+          - "ip dhcp excluded-address 10.1.10.1 10.1.10.49"
+          - "ip dhcp excluded-address 10.1.10.200 10.1.10.254"
+  
+    - name: dhcp vlan10
+      cisco.ios.ios_config:
+        parents: "ip dhcp pool VLAN10"
+        lines:
+          - "network 10.1.10.0 255.255.255.0"
+          - "default-router 10.1.10.1"
+          - "dns-server 8.8.8.8 1.1.1.1"
+
+
+    - name: dhcp vlan20
+      cisco.ios.ios_config:
+        lines:
+          - "ip dhcp excluded-address 10.1.20.1 10.1.20.49"
+          - "ip dhcp excluded-address 10.1.20.200 10.1.20.254"
+
+    - name: dhcp vlan20
+      cisco.ios.ios_config:
+        parents: "ip dhcp pool VLAN20"
+        lines:
+          - "network 10.1.20.0 255.255.255.0"
+          - "default-router 10.1.20.1"
+          - "dns-server 8.8.8.8 1.1.1.1"
+
+    - name: acl 99
+      cisco.ios.ios_config:
+        lines:
+          - "no access-list 99"
+          - "access-list 99 permit 10.0.99.0 0.0.0.255"
+          - "access-list 99 permit 10.1.99.0 0.0.0.255"
+          - "access-list 99 deny any log"

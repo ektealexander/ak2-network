@@ -1,0 +1,18 @@
+---
+- hosts: sw1
+  gather_facts: no
+  tasks:
+    - name: vlan
+      cisco.ios.ios_config:
+        lines:
+          - "vlan 99"
+          - "name MGMT"
+
+    - name: trunk r1 and r2
+      cisco.ios.ios_config:
+        parents: "interface range GigabitEthernet1/0/23 - 24"
+        lines:
+          - "switchport"
+          - "switchport mode trunk"
+          - "switchport trunk allowed vlan 99"
+          - "no shutdown"
