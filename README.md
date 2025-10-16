@@ -1,8 +1,8 @@
-# Reproduce this lab (exact steps & IPs)
+# Network Automation Lab
 
-This file gives exact, copy-paste steps so another IT person (for example your teacher) can reproduce the lab configuration from this repository.
-
-Follow the steps in order: 1) run serial baselines to set device management IPs and enable SSH, 2) run Ansible playbooks to apply the network configuration.
+Follow the steps in order: 
+1) Run serial baselines to set device management IPs and enable SSH
+2) Run Ansible playbooks to apply the network configuration.
 
 ## Exact inventory (from `ansible/hosts`)
 
@@ -33,7 +33,6 @@ Group variables (inventory-level defaults from `ansible/hosts`):
 - `ansible_become_method=enable`
 - `ansible_become_password=cisco`
 
-> Important: these credentials are lab defaults. Replace them in real deployments and do not commit secrets.
 
 ## Devices used (physical models)
 
@@ -52,7 +51,6 @@ This lab was built using the following physical devices. When reproducing the la
   - `sw4` — Catalyst 1000 (management IP 10.1.99.12)
   - `sw5` — Catalyst 1000 (management IP 10.1.99.13)
 
-Use the exact model names above when possible; if using virtual devices (e.g., IOSv/CSR), ensure they support HSRP and `cisco.ios` module operations.
 
 ## Cabling (as defined by the Ansible playbooks)
 
@@ -105,10 +103,6 @@ Key:
 - `sw2`, `sw3` — aggregation switches with EtherChannel between them
 - `sw4`, `sw5` — access switches with VLAN10/VLAN20 access ports
 ```
-
-If you prefer, I will place the provided image in the repo as `topology.png` and embed it here as a visual reference. Just confirm whether you want it at the repository root or in a `docs/` folder.
-
-Embedded image (placed at `docs/topology.png`):
 
 ![Lab topology](docs/topology.png)
 _Figure: Lab topology (sw1↔r1/r2 → r1/r2↔sw2 → sw2↔sw3 (EtherChannel) → sw3↔sw4/sw5)._ 
@@ -269,6 +263,3 @@ ansible-galaxy collection install cisco.ios
 ## Notes & safety
 
 - The instructions above intentionally use the exact IPs and default lab credentials present in this repository to enable reproducibility. Change the credentials and secrets before using the code in production.
-- Do not commit real credentials to the repo. Use Ansible Vault or environment variables for secrets.
-
-If you want, I can also convert this into a printable checklist (one line per step) or produce a simple lab diagram showing how devices are cabled together. Which would you prefer?
