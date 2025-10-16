@@ -14,6 +14,7 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.0.99.2 255.255.255.0"
+          - "standby version 2"
           - "standby 10 ip 10.0.99.1"
           - "standby 10 priority 120"
           - "standby 10 preempt"
@@ -31,6 +32,7 @@
         lines:
           - "encapsulation dot1Q 10"
           - "ip address 10.1.10.2 255.255.255.0"
+          - "standby version 2"
           - "standby 20 ip 10.1.10.1"
           - "standby 20 priority 120"
           - "standby 20 preempt"
@@ -42,6 +44,7 @@
         lines:
           - "encapsulation dot1Q 20"
           - "ip address 10.1.20.2 255.255.255.0"
+          - "standby version 2"         
           - "standby 30 ip 10.1.20.1"
           - "standby 30 priority 120"
           - "standby 30 preempt"
@@ -53,6 +56,7 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.1.99.2 255.255.255.0"
+          - "standby version 2"
           - "standby 40 ip 10.1.99.1"
           - "standby 40 priority 120"
           - "standby 40 preempt"
@@ -93,5 +97,4 @@
         lines:
           - "no access-list 99"
           - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 permit 10.1.99.0 0.0.0.255"
           - "access-list 99 deny any log"

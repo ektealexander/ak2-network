@@ -21,18 +21,16 @@
 
     - name: access-ports vlan 10
       cisco.ios.ios_config:
-        parents: "interface range gi1/0/1"
+        parents: "interface gi1/0/1"
         lines:
           - "switchport mode access"
           - "switchport access vlan 10"
-          - "spanning-tree portfast"
           - "no shutdown"
 
     - name: access-ports vlan 20
       cisco.ios.ios_config:
-        parents: "interface range gi1/0/2"
+        parents: "interface gi1/0/2"
         lines:
           - "switchport mode access"
           - "switchport access vlan 20"
-          - "spanning-tree portfast"
           - "no shutdown"

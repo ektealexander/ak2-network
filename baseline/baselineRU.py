@@ -61,7 +61,7 @@ def parse_if_list(expr: str):
     return [p.strip() for p in expr.split(",") if p.strip()]
 
 def main():
-    print("=== Baseline Cisco ROUTER ===")
+    print("=== Baseline Cisco RU ===")
     port     = input("Serial port [COM3]: ").strip() or "COM3"
     hostname = input("Hostname: ").strip()
     enable_s = getpass.getpass("Enable secret [cisco]: ").strip() or "cisco"
@@ -88,18 +88,18 @@ def main():
         "ip ssh version 2",
 
         "line con 0",
-        " logging synchronous",
-        " exec-timeout 10 0",
-        " login local",
+        "logging synchronous",
+        "exec-timeout 10 0",
+        "login local",
         "exit",
         "line vty 0 15",
-        " login local",
-        " transport input ssh",
-        " exec-timeout 10 0",
+        "login local",
+        "transport input ssh",
+        "exec-timeout 10 0",
         "exit",
 
         f"interface {mgmt_if}",
-        " no shutdown",
+        "no shutdown",
         f"interface {mgmt_if}.{mgmt_vlan}",
         f"encapsulation dot1Q {mgmt_vlan}",
         f"ip address {mgmt_ip} {mgmt_msk}",

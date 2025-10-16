@@ -14,9 +14,8 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.0.99.3 255.255.255.0"
+          - "standby version 2"
           - "standby 10 ip 10.0.99.1"
-          - "standby 10 priority 110"
-          - "standby 10 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1 sw2
@@ -31,9 +30,8 @@
         lines:
           - "encapsulation dot1Q 10"
           - "ip address 10.1.10.3 255.255.255.0"
+          - "standby version 2"
           - "standby 20 ip 10.1.10.1"
-          - "standby 20 priority 110"
-          - "standby 20 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1.20 HSRP sw2
@@ -42,9 +40,8 @@
         lines:
           - "encapsulation dot1Q 20"
           - "ip address 10.1.20.3 255.255.255.0"
+          - "standby version 2"
           - "standby 30 ip 10.1.20.1"
-          - "standby 30 priority 110"
-          - "standby 30 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1.99 sw2
@@ -54,9 +51,8 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.1.99.3 255.255.255.0"
+          - "standby version 2"
           - "standby 40 ip 10.1.99.1"
-          - "standby 40 priority 110"
-          - "standby 40 preempt"
           - "no shutdown"
   
     - name: acl 99
@@ -64,5 +60,4 @@
         lines:
           - "no access-list 99"
           - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 permit 10.1.99.0 0.0.0.255"
           - "access-list 99 deny any log"

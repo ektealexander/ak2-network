@@ -43,7 +43,7 @@ def parse_if_list(expr: str):
     return [p.strip() for p in expr.split(",") if p.strip()]
 
 def main():
-    print("=== Baseline Cisco SWITCH ===")
+    print("=== Baseline Cisco SW ===")
     port       = input("Serialport [COM3]: ").strip() or "COM3"
     hostname   = input("Hostname: ").strip()
     enable_s   = getpass.getpass("Enable secret [cisco]: ").strip() or "cisco"
@@ -78,27 +78,27 @@ def main():
         "ip ssh version 2",
 
         f"vlan {mgmt_vlan}",
-        " name MGMT",
+        "name MGMT",
         "exit",
         f"interface vlan {mgmt_vlan}",
-        f" ip address {mgmt_ip} {mgmt_msk}",
-        " no shutdown",
+        f"ip address {mgmt_ip} {mgmt_msk}",
+        "no shutdown",
         "exit",
 
         f"ip default-gateway {mgmt_gw}",
 
         "line vty 0 15",
-        " login local",
-        " transport input ssh",
-        " exec-timeout 10 0",
+        "login local",
+        "transport input ssh",
+        "exec-timeout 10 0",
         "exit",
     ]
 
     trunk_block = [
-        " switchport",
-        " switchport mode trunk",
-        f" switchport trunk allowed vlan add {mgmt_vlan}",
-        " no shutdown",
+        "switchport",
+        "switchport mode trunk",
+        f"switchport trunk allowed vlan add {mgmt_vlan}",
+        "no shutdown",
         "exit",
     ]
     if len(trunks) > 1:
@@ -108,11 +108,11 @@ def main():
 
     if access_ports:
         acc_block = [
-            " switchport",
-            f" switchport mode access",
-            f" switchport access vlan {mgmt_vlan}",
-            " spanning-tree portfast",
-            " no shutdown",
+            "switchport",
+            f"switchport mode access",
+            f"switchport access vlan {mgmt_vlan}",
+            "spanning-tree portfast",
+            "no shutdown",
             "exit",
         ]
         if len(access_ports) > 1:
