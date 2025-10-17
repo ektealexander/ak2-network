@@ -90,8 +90,8 @@ Below is a compact ASCII diagram that matches the attached topology image and th
              \           /
                \       /
                 sw2 (agg)
-                 ||   ||   <-- EtherChannel (2 cables) to sw3
-                 ||   ||
+                 ||      <-- EtherChannel (2 cables) to sw3
+                 ||   
                 sw3 (agg)
                /    \
               /      \
