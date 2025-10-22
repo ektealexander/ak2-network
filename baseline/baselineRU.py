@@ -34,12 +34,12 @@ def send_cmd(ser, cmd, wait=None):
 
 def skip_initial_dialog(ser):
     print("Skipping initial config dialog sequence...")
-    send_cmd(ser, "\r", 1.0)      # 1. Wake console
-    send_cmd(ser, "no", 1.0)      # 2. Answer 'no'
-    send_cmd(ser, "yes", 1.0)     # 3. Confirm skip
+    send_cmd(ser, "\r", 1.0)
+    send_cmd(ser, "no", 1.0)
+    send_cmd(ser, "yes", 1.0)
     print("Waiting 40 seconds for device to fully load...")
-    time.sleep(40)                # 4. Wait for system boot
-    send_cmd(ser, "\r", 1.0)      # 5. Final Enter to reach prompt
+    time.sleep(40)
+    send_cmd(ser, "\r", 1.0)
     print("Device ready for configuration.")
 
 def parse_if_list(expr: str):
