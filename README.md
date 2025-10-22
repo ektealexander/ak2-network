@@ -215,28 +215,27 @@ After Step A (serial baseline) is complete on every device, run the Ansible play
 1) Start with `SW1` (L3-switch / management VLAN)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/SW1.yml
+ansible-playbook -i hosts playbooks/sw1.yml
 ```
 
 2) Run routers `R1` and `R2` (they provide HSRP/virtual gateways used by switches)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/R1.yml
-ansible-playbook -i ansible/hosts ansible/playbooks/R2.yml
+ansible-playbook -i hosts playbooks/r1.yml
+ansible-playbook -i hosts playbooks/r2.yml
 ```
 
 3) Aggregation / distribution switches `SW2` and `SW3`
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/SW2.yml
-ansible-playbook -i ansible/hosts ansible/playbooks/SW3.yml
+ansible-playbook -i hosts playbooks/sw2.yml
+ansible-playbook -i hosts playbooks/sw3.yml
 ```
 
 4) Access switches `SW4` and `SW5` (last)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/SW4-5.yml
-```
+ansible-playbook -i hosts playbooks/sw4-5.yml```
 
 This ordering ensures `SW1` is configured first (management VLAN/SVI present), routers then provide gateway/HSRP, aggregation switches configure port-channels and trunks, and finally access switches are configured last.
 
