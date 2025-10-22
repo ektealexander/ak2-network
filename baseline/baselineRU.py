@@ -32,30 +32,15 @@ def send_cmd(ser, cmd, wait=None):
     ser.write(cmd.encode("utf-8"))
     time.sleep(wait)
 
-#def skip_initial_dialog(ser):
-#    for _ in range(3):
-#        send_cmd(ser, "\r", 0.5)
-#    send_cmd(ser, "no", 1.0)
-#    send_cmd(ser, "yes", 1.0)
-
 def skip_initial_dialog(ser):
-    buffer = ""
-    start = time.time()
-    print("Waits on 'initial configuration dialog'...")
-
-    while time.time() - start < 30:
-        if ser.in_waiting > 0:
-            buffer += ser.read(ser.in_waiting).decode(errors="ignore")
-            if "initial configuration dialog" in buffer.lower():
-                send_cmd(ser, "no", 1.0)
-                send_cmd(ser, "yes", 1.0)
-                return
-        time.sleep(0.5)
-
-    print("No prompt found, sending commands")
-    send_cmd(ser, "\r", 0.5)
-    send_cmd(ser, "no", 1.0)
-    send_cmd(ser, "yes", 1.0)
+    print("Skipping initial config dialog sequence...")
+    send_cmd(ser, "\r", 1.0)      # 1. Wake console
+    send_cmd(ser, "no", 1.0)      # 2. Answer 'no'
+    send_cmd(ser, "yes", 1.0)     # 3. Confirm skip
+    print("Waiting 40 seconds for device to fully load...")
+    time.sleep(40)                # 4. Wait for system boot
+    send_cmd(ser, "\r", 1.0)      # 5. Final Enter to reach prompt
+    print("Device ready for configuration.")
 
 def parse_if_list(expr: str):
     return [p.strip() for p in expr.split(",") if p.strip()]

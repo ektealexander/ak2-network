@@ -2,6 +2,11 @@
 - hosts: r2
   gather_facts: no
   tasks:
+    - name: hostname
+      cisco.ios.ios_hostname:
+        config: 
+          hostname: R2
+
     - name: trunk 0/0/0 sw1
       cisco.ios.ios_config:
         parents: "interface gi0/0/0"
@@ -14,8 +19,9 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.0.99.3 255.255.255.0"
-          - "standby version 2"
           - "standby 10 ip 10.0.99.1"
+          - "standby 10 priority 110"
+          - "standby 10 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1 sw2
@@ -30,8 +36,9 @@
         lines:
           - "encapsulation dot1Q 10"
           - "ip address 10.1.10.3 255.255.255.0"
-          - "standby version 2"
           - "standby 20 ip 10.1.10.1"
+          - "standby 20 priority 110"
+          - "standby 20 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1.20 HSRP sw2
@@ -40,8 +47,9 @@
         lines:
           - "encapsulation dot1Q 20"
           - "ip address 10.1.20.3 255.255.255.0"
-          - "standby version 2"
           - "standby 30 ip 10.1.20.1"
+          - "standby 30 priority 110"
+          - "standby 30 preempt"
           - "no shutdown"
 
     - name: trunk 0/0/1.99 sw2
@@ -51,52 +59,15 @@
         lines:
           - "encapsulation dot1Q 99"
           - "ip address 10.1.99.3 255.255.255.0"
-          - "standby version 2"
           - "standby 40 ip 10.1.99.1"
+          - "standby 40 priority 110"
+          - "standby 40 preempt"
           - "no shutdown"
   
     - name: acl 99
       cisco.ios.ios_config:
         lines:
-        match: line
-        replace: line
+          - "no access-list 99"
           - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 deny any"
-
-    - name: vty 0-15 with acl
-      cisco.ios.ios_config:
-        parents: line vty 0 15
-        lines: 
-        match: line
-        replace: line
-          - "exec-timeout 10 0"
-          - "transport input ssh"
-          - "login local"
-          - "access-class 99 in"
-
-    - name: block multiple vlan to mgmt-vlan
-      cisco.ios.ios_config:
-        paretns: ip access-list extended protect_v99
-        lines:       
-        match: line
-        replace: line
-          - "deny ip any 10.1.99.0 0.0.0.255"
-          - "deny ip any 10.0.99.0 0.0.0.255"
-          - "permit ip any any"
-
-    
-    - name: apply acl on L3 interface 0.0.0.99
-      cisco.ios.ios_config:
-        parents: interface GigabitEthernet0/0/0.99
-        line:
-        match: line
-        replace: line
-          - "ip access-group protect_v99 out"
-
-    - name: apply acl on L3 interface 0.0.1.99
-      cisco.ios.ios_config:
-        parents: interface GigabitEthernet0/0/1.99
-        line:
-        match: line
-        replace: line
-          - "ip access-group protect_v99 out"
+          - "access-list 99 permit 10.1.99.0 0.0.0.255"
+          - "access-list 99 deny any log"

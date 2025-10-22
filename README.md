@@ -9,19 +9,19 @@ Follow the steps in order:
 Use these hostnames and management IPs when prompted by the baseline scripts or when targeting with Ansible:
 
 - l3
-  - `sw1` — 10.0.99.10
+  - `SW1` — 10.0.99.10
 
 - router
-  - `r1` — 10.0.99.2
-  - `r2` — 10.0.99.3
+  - `R1` — 10.0.99.2
+  - `R2` — 10.0.99.3
 
 - agg
-  - `sw2` — 10.1.99.10
-  - `sw3` — 10.1.99.11
+  - `SW2` — 10.1.99.10
+  - `SW3` — 10.1.99.11
 
 - access
-  - `sw4` — 10.1.99.12
-  - `sw5` — 10.1.99.13
+  - `SW4` — 10.1.99.12
+  - `SW5` — 10.1.99.13
 
 Group variables (inventory-level defaults from `ansible/hosts`):
 
@@ -39,17 +39,17 @@ Group variables (inventory-level defaults from `ansible/hosts`):
 This lab was built using the following physical devices. When reproducing the lab, use equivalent hardware or virtual devices that support the same IOS features (subinterfaces, HSRP, SVIs):
 
 - Routers (2): Cisco 4221
-  - `r1` — Cisco 4221 (management IP 10.0.99.2)
-  - `r2` — Cisco 4221 (management IP 10.0.99.3)
+  - `R1` — Cisco 4221 (management IP 10.0.99.2)
+  - `R2` — Cisco 4221 (management IP 10.0.99.3)
 
 - L3 switch (1): Catalyst 3650
-  - `sw1` — Catalyst 3650 (management IP 10.0.99.10)
+  - `SW1` — Catalyst 3650 (management IP 10.0.99.10)
 
 - L2 switches (4): Catalyst 2960 / Catalyst 1000 series
-  - `sw2` — Catalyst 2960 (management IP 10.1.99.10)
-  - `sw3` — Catalyst 2960 (management IP 10.1.99.11)
-  - `sw4` — Catalyst 1000 (management IP 10.1.99.12)
-  - `sw5` — Catalyst 1000 (management IP 10.1.99.13)
+  - `SW2` — Catalyst 2960 (management IP 10.1.99.10)
+  - `SW3` — Catalyst 2960 (management IP 10.1.99.11)
+  - `SW4` — Catalyst 1000 (management IP 10.1.99.12)
+  - `SW5` — Catalyst 1000 (management IP 10.1.99.13)
 
 
 ## Cabling (as defined by the Ansible playbooks)
@@ -58,18 +58,18 @@ The topology and interface endpoints are derived directly from the `ansible/play
 
 Corrected topology mapping (per your update):
 
-- sw1 Gi1/0/23  <-->  r1  Gi0/0/0
-- sw1 Gi1/0/24  <-->  r2  Gi0/0/0
+- SW1 Gi1/0/23  <-->  R1  Gi0/0/0
+- SW1 Gi1/0/24  <-->  R2  Gi0/0/0
 
-- r1 Gi0/0/1   <-->  sw2 Gi0/0/23
-- r2 Gi0/0/1   <-->  sw2 Gi0/0/24
+- R1 Gi0/0/1   <-->  SW2 Fa0/23
+- R2 Gi0/0/1   <-->  SW2 Fa0/24
 
-- sw2 Gi0/21  <-->  sw3 Gi0/21   (EtherChannel member)
-- sw2 Gi0/22  <-->  sw3 Gi0/22   (EtherChannel member)
-  - These two cables form `Port-channel10` between `sw2` and `sw3` (EtherChannel)
+- SW2 Fa0/21  <-->  SW3 Fa0/21   (EtherChannel member)
+- SW2 Fa0/22  <-->  SW3 Fa0/22   (EtherChannel member)
+  - These two cables form `Port-channel6` between `SW2` and `SW3` (EtherChannel)
 
-- sw3 Gi0/23  <-->  sw4 Gi1/0/24   (single cable)
-- sw3 Gi0/24  <-->  sw5 Gi1/0/24   (single cable)
+- SW3 Fa0/23  <-->  SW4 Gi1/0/24   (single cable)
+- SW3 Fa0/24  <-->  SW5 Gi1/0/24   (single cable)
 
 Notes:
 - Playbooks use several different slot/slot/module numbering conventions (for example `Gi0/0/x` and `Gi1/0/x`). Use the interface labels printed on your physical devices; match the playbook's interface names when you configure/plug cables.
@@ -82,30 +82,30 @@ Below is a compact ASCII diagram that matches the attached topology image and th
 ```
                  MGMT-PC
                    |
-               sw1 (3650)  (management SVI: 10.0.99.10)
+               SW1 (3650)  (management SVI: 10.0.99.10)
                /        \
              /            \
-         r1(4221)       r2(4221)
+         R1(4221)       R2(4221)
             \             /
              \           /
                \       /
-                sw2 (agg)
-                 ||      <-- EtherChannel (2 cables) to sw3
+                SW2 (agg)
+                 ||      <-- EtherChannel (2 cables) to SW3
                  ||   
-                sw3 (agg)
+                SW3 (agg)
                /    \
               /      \
-          sw4        sw5   (access switches, single links)
+          SW4        SW5   (access switches, single links)
 
 Key:
-- `sw1` — L3 switch (3650)
-- `r1`, `r2` — routers (4221) forming HSRP
-- `sw2`, `sw3` — aggregation switches with EtherChannel between them
-- `sw4`, `sw5` — access switches with VLAN10/VLAN20 access ports
+- `SW1` — L3 switch (3650)
+- `R1`, `R2` — routers (4221) forming HSRP
+- `SW2`, `SW3` — aggregation switches with EtherChannel between them
+- `SW4`, `SW5` — access switches with VLAN10/VLAN20 access ports
 ```
 
 ![Lab topology](docs/topology.png)
-_Figure: Lab topology (sw1↔r1/r2 → r1/r2↔sw2 → sw2↔sw3 (EtherChannel) → sw3↔sw4/sw5)._ 
+_Figure: Lab topology (SW1↔R1/R2 → R1/R2↔SW2 → SW2↔SW3 (EtherChannel) → SW3↔SW4/SW5)._ 
 
 ## Important sequencing requirement
 
@@ -134,7 +134,7 @@ Notes about defaults used by the scripts:
 - Enable secret (default shown at prompt): `cisco`
 - Local admin username/password defaults: `cisco` / (you will be prompted to enter the password)
 
-1) Router baseline — `r1` (example using COM3)
+1) Router baseline — `R1` (example using COM3)
 
 ```powershell
 python baseline\baselineRU.py
@@ -142,39 +142,39 @@ python baseline\baselineRU.py
 
 When prompted, enter these values to match `ansible/hosts`:
 - Serial port: `COM3` (replace if your port is different)
-- Hostname: `r1`
+- Hostname: `R1`
 - Enable secret: `cisco` (or press Enter to accept default)
 - Local admin username: `cisco`
 - Password for local admin: (choose a password, `cisco` is expected in inventory; use `cisco` for exact replication)
-- Management interface (example): `GigabitEthernet0/0/1` (script accepts case-insensitive; common example)
+- Management interface (example): `gi0/0/0` (script accepts case-insensitive; common example)
 - Management IP address: `10.0.99.2`
 - Management subnet mask: `255.255.255.0`
 
-After the script finishes, SSH should be available at `ssh cisco@10.0.99.2`.
+After the script finishes, SSH should be available at `ssh cisco@10.0.99.0`.
 
-2) Router baseline — `r2`
+2) Router baseline — `R2`
 
-Repeat for `r2` (adjust COM port as needed):
+Repeat for `R2` (adjust COM port as needed):
 
 ```powershell
 python baseline\baselineRU.py
 ```
 
 Prompt values (to match inventory):
-- Hostname: `r2`
+- Hostname: `R2`
 - Management IP address: `10.0.99.3`
 - Management subnet mask: `255.255.255.0`
-- Other prompts: same defaults as for `r1` (enable secret, local admin `cisco`, etc.)
+- Other prompts: same defaults as for `R1` (enable secret, local admin `cisco`, etc.)
 
-3) Switch baseline — `sw1`
+3) Switch baseline — `SW1`
 
 ```powershell
 python baseline\baselineSW.py
 ```
 
-Prompt values to match inventory (sw1 is on 10.0.99.0 mgmt network):
+Prompt values to match inventory (SW1 is on 10.0.99.0 mgmt network):
 - Serial port: `COM3` (or your COM port)
-- Hostname: `sw1`
+- Hostname: `SW1`
 - Enable secret: `cisco`
 - Local admin account: `cisco` (password enter `cisco` to match inventory)
 - MGMT VLAN ID: `99`
@@ -183,14 +183,14 @@ Prompt values to match inventory (sw1 is on 10.0.99.0 mgmt network):
 - MGMT default-gateway: `10.0.99.1` (HSRP virtual IP — configured by routers)
 - Trunk ports: follow prompts, e.g. `Gi0/1` or the physical ports connected to uplinks
 
-4) Switch baselines — `sw2`, `sw3`, `sw4`, `sw5`
+4) Switch baselines — `SW2`, `SW3`, `SW4`, `SW5`
 
 Run `baselineSW.py` for each switch and enter the inventory IPs:
 
-- `sw2` → MGMT IP `10.1.99.10`
-- `sw3` → MGMT IP `10.1.99.11`
-- `sw4` → MGMT IP `10.1.99.12`
-- `sw5` → MGMT IP `10.1.99.13`
+- `SW2` → MGMT IP `10.1.99.10`
+- `SW3` → MGMT IP `10.1.99.11`
+- `SW4` → MGMT IP `10.1.99.12`
+- `SW5` → MGMT IP `10.1.99.13`
 
 For switches in the 10.1.99.0 network, set the MGMT default gateway to whatever gateway your lab uses (if you replicate exactly, ensure routers provide reachability). If you plan to centralize management on the 10.0.99 network, adjust accordingly.
 
@@ -199,10 +199,10 @@ Verification after serial baselines
 From your management PC, verify SSH connectivity:
 
 ```powershell
-ssh cisco@10.0.99.2   # r1
-ssh cisco@10.0.99.3   # r2
-ssh cisco@10.0.99.10  # sw1
-ssh cisco@10.1.99.10  # sw2
+ssh cisco@10.0.99.2   # R1
+ssh cisco@10.0.99.3   # R2
+ssh cisco@10.0.99.10  # SW1
+ssh cisco@10.1.99.10  # SW2
 ```
 
 If SSH fails, re-check the serial step output to confirm RSA key generation and `ip address` configuration.
@@ -212,38 +212,38 @@ If SSH fails, re-check the serial step output to confirm RSA key generation and 
 
 After Step A (serial baseline) is complete on every device, run the Ansible playbooks in the sequence required by the topology and playbook dependencies.
 
-1) Start with `sw1` (L3-switch / management VLAN)
+1) Start with `SW1` (L3-switch / management VLAN)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/sw1.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/SW1.yml
 ```
 
-2) Run routers `r1` and `r2` (they provide HSRP/virtual gateways used by switches)
+2) Run routers `R1` and `R2` (they provide HSRP/virtual gateways used by switches)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/r1.yml
-ansible-playbook -i ansible/hosts ansible/playbooks/r2.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/R1.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/R2.yml
 ```
 
-3) Aggregation / distribution switches `sw2` and `sw3`
+3) Aggregation / distribution switches `SW2` and `SW3`
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/sw2.yml
-ansible-playbook -i ansible/hosts ansible/playbooks/sw3.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/SW2.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/SW3.yml
 ```
 
-4) Access switches `sw4` and `sw5` (last)
+4) Access switches `SW4` and `SW5` (last)
 
 ```powershell
-ansible-playbook -i ansible/hosts ansible/playbooks/sw4-5.yml
+ansible-playbook -i ansible/hosts ansible/playbooks/SW4-5.yml
 ```
 
-This ordering ensures `sw1` is configured first (management VLAN/SVI present), routers then provide gateway/HSRP, aggregation switches configure port-channels and trunks, and finally access switches are configured last.
+This ordering ensures `SW1` is configured first (management VLAN/SVI present), routers then provide gateway/HSRP, aggregation switches configure port-channels and trunks, and finally access switches are configured last.
 
 Notes about the playbooks
 
-- Playbooks use `cisco.ios.ios_config` to push configuration snippets. The `r1.yml` and `r2.yml` playbooks create subinterfaces and HSRP groups (example virtual IP 10.0.99.1 on subinterface `.99`).
-- `sw1.yml` creates VLAN 99 and applies trunking to uplink ports used for management.
+- Playbooks use `cisco.ios.ios_config` to push configuration snippets. The `R1.yml` and `R2.yml` playbooks create subinterfaces and HSRP groups (example virtual IP 10.0.99.1 on subinterface `.99`).
+- `SW1.yml` creates VLAN 99 and applies trunking to uplink ports used for management.
 
 ## Verification after Ansible
 

@@ -2,19 +2,27 @@
 - hosts: access
   gather_facts: no
   tasks:
-    - name: vlan
-      cisco.ios.ios_config:
-        lines:
-          - "vlan 10"
-          - "name STUD1"
-          - "vlan 20"
-          - "name STUD2"
+    - name: add vlan 10,20,99
+      cisco.ios.ios_vlans:
+        config:
+          - name: MGMT
+            state: active
+            vlan_id: 99
+            shutdown: disabled
+          - name: STUD1
+            state: active
+            vlan_id: 10
+            shutdown: disabled
+          - name: STUD2
+            state: active
+            vlan_id: 20
+            shutdown: disabled
+        state: merged
 
     - name: uplink to agg
       cisco.ios.ios_config:
         parents: "interface gi1/0/24"
         lines:
-          - "switchport"
           - "switchport mode trunk"
           - "switchport trunk allowed vlan 10,20,99"
           - "no shutdown"
@@ -25,6 +33,7 @@
         lines:
           - "switchport mode access"
           - "switchport access vlan 10"
+          - "spanning-tree portfast"
           - "no shutdown"
 
     - name: access-ports vlan 20
@@ -33,23 +42,5 @@
         lines:
           - "switchport mode access"
           - "switchport access vlan 20"
+          - "spanning-tree portfast"
           - "no shutdown"
-
-    - name: acl 99
-      cisco.ios.ios_config:
-        lines:
-        match: line
-        replace: line
-          - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 deny any"
-
-    - name: vty 0-15 with acl
-      cisco.ios.ios_config:
-        parents: line vty 0 15
-        lines: 
-        match: line
-        replace: line
-          - "exec-timeout 10 0"
-          - "transport input ssh"
-          - "login local"
-          - "access-class 99 in"

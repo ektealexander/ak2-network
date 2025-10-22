@@ -2,11 +2,19 @@
 - hosts: sw1
   gather_facts: no
   tasks:
-    - name: vlan
-      cisco.ios.ios_config:
-        lines:
-          - "vlan 99"
-          - "name MGMT"
+    - name: hostname
+      cisco.ios.ios_hostname:
+        config: 
+          hostname: SW1
+
+    - name: add vlan 99
+      cisco.ios.ios_vlans:
+        config:
+          - name: MGMT
+            state: active
+            vlan_id: 99
+            shutdown: disabled
+        state: merged
 
     - name: trunk r1 and r2
       cisco.ios.ios_config:
@@ -16,22 +24,3 @@
           - "switchport mode trunk"
           - "switchport trunk allowed vlan 99"
           - "no shutdown"
-
-    - name: acl 99
-      cisco.ios.ios_config:
-        lines:
-        match: line
-        replace: line
-          - "access-list 99 permit 10.0.99.0 0.0.0.255"
-          - "access-list 99 deny any"
-
-    - name: vty 0-15 with acl
-      cisco.ios.ios_config:
-        parents: line vty 0 15
-        lines: 
-        match: line
-        replace: line
-          - "exec-timeout 10 0"
-          - "transport input ssh"
-          - "login local"
-          - "access-class 99 in"
